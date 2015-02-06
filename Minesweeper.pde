@@ -1,7 +1,7 @@
 
 import de.bezier.guido.*;
-int NUM_ROWS = 20; int NUM_COLS = 20;
-private MSButton[][] buttons; //2d array of minesweeper buttons
+public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20;
+private MSButton[][] buttons = new MSButton[20][20]; //2d array of minesweeper buttons
 ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 
 void setup ()
@@ -15,30 +15,28 @@ void setup ()
     
 
     //declare and initialize buttons
-    MSButton[][] buttons = new MSButton[20][20];
+    
     for (int i = 0; i < NUM_ROWS; i ++) {
         for (int j = 0; j < NUM_COLS; j ++) {
             buttons[i][j] = new MSButton(i, j);
         }
     }
-    System.out.println(buttons[1][1].isMarked());
-
-    int x = ((int)(Math.random()*20));
-    int y = ((int)(Math.random()*20));
-    for (int i = 0; i < 100; i ++) {
-        if (!(bombs.contains(buttons[x][y]))) {
-            bombs.add(buttons[x][y]);
-        }
-    }
-    //setBombs();
+    
+    setBombs();
+    
 }
 public void setBombs()
 {
     //your code
-    int x = ((int)(Math.random()*20));
-    int y = ((int)(Math.random()*20));
-    if (!(bombs.contains(buttons[x][y]))) {
-        bombs.add(buttons[x][y]);
+    
+    int i = 0;
+    while (i < 30) {
+        int x = ((int)(Math.random()*20));
+        int y = ((int)(Math.random()*20));
+        if (!(bombs.contains(buttons[x][y]))) {
+            bombs.add(buttons[x][y]);
+            i ++;
+        }
     }
     
 }
@@ -96,7 +94,19 @@ public class MSButton
     public void mousePressed () 
     {
         clicked = true;
-        //your code here
+        if (mouseButton == RIGHT) {marked = !marked;}
+        if (bombs.contains(this)) {
+            System.out.println("You Lost.");
+        } else if (countBombs(r, c) > 0) {
+            setLabel("0");
+        } /*else {*/
+            for (int i = r - 1; i <=  r + 1; i ++) {
+                for (int j = c - 1; j <= c + 1; j ++) {
+                    if (i == 0 && j == 0) {j ++;}
+                    if (isValid(i, j) && countBombs(i, j) == 0) {buttons[i][j].mousePressed();}
+                }
+            }
+        //}
     }
 
     public void draw () 
@@ -121,12 +131,21 @@ public class MSButton
     public boolean isValid(int r, int c)
     {
         //your code here
+        if (r < NUM_ROWS && c < NUM_COLS) {
+            return true;
+        }
         return false;
     }
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
-        //your code here
+        for (int i = r - 1; i <= r + 1; i ++) {
+            for (int j = c - 1; j <= c + 1; j ++) {
+                //if (i == 0 && j == 0) {j ++;}
+                if (isValid(i, j) && bombs.contains(buttons[row][col])) {numBombs ++;}
+            }
+        }        
+        
         return numBombs;
     }
 }
