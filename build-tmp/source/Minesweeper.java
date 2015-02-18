@@ -18,10 +18,12 @@ public class Minesweeper extends PApplet {
 
 
 
-public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20;
+public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20; public final static int NUM_BOMBS = 50;
 private MSButton[][] buttons = new MSButton[20][20]; //2d array of minesweeper buttons
 ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 ArrayList <MSButton> craters = new ArrayList <MSButton>();
+ArrayList <MSButton> army = new ArrayList <MSButton>();
+ArrayList <MSButton> guns = new ArrayList <MSButton>();
 boolean gameOver = false;
 int clickCounter;
 
@@ -45,37 +47,48 @@ public void setup ()
     }
     
     setBombs();
-
-    
+    setGuns();
+    army.add(buttons[NUM_ROWS - 1][NUM_COLS - 1]);
+   
 }
 public void setBombs()
 {
     int i = 0;
-    while (i < 4) {
-        int x = ((int)(Math.random()*20));
-        int y = ((int)(Math.random()*20));
-        if (!(bombs.contains(buttons[x][y]))) {
+    while (i < NUM_BOMBS) {
+        int x = ((int)(Math.random()*19));
+        int y = ((int)(Math.random()*19));
+        if (!(bombs.contains(buttons[x][y])) && !(army.contains(buttons[x][y]))) {
             bombs.add(buttons[x][y]);
             i ++;
         }
     }
-    
-    
-}
 
+}
+public void setGuns()
+{
+    int i = 0;
+    while (i < 3) {
+        int x = ((int)(Math.random()*19));
+        int y = ((int)(Math.random()*19));
+        if (!(bombs.contains(buttons[x][y])) && !(army.contains(buttons[x][y]))) {
+            guns.add(buttons[x][y]);
+            i ++;
+        }
+    }
+}
 public void draw ()
 {
     background( 0 );
     if(isWon())
         displayWinningMessage();
-    
+    System.out.println(gameOver);
  
 }
 public void artillery() {
     if (clickCounter % 3 == 0) {
         int x = ((int)(Math.random()*20));
         int y = ((int)(Math.random()*20));
-        if (!(craters.contains(buttons[x][y]))) {
+        if (!(craters.contains(buttons[x][y])) && x != 0 && y != 0) {
             craters.add(buttons[x][y]);
         }
     }      
@@ -83,19 +96,32 @@ public void artillery() {
 public boolean isWon()
 {
     boolean wonYet = false;
-    for (int i = 0; i < NUM_ROWS; i ++) {
+    /*for (int i = 0; i < NUM_ROWS; i ++) {
         for (int j = 0; j < NUM_COLS; j ++) {
             if (!buttons[i][j].isMarked() && !buttons[i][j].isClicked()) {
                 return false;
             }
         }
         
-    }
-    if (!gameOver) {return true;}
+    }*/
+
+    //if (!gameOver && army.contains(buttons[0][0])) {return true;}
+    if (!gameOver && guns.size() == 0) {return true;}
     else {return false;}
     
     
 }
+
+public boolean isValid(int r, int c)
+    {
+        //your code here
+
+        if (r < NUM_ROWS && c < NUM_COLS && r >= 0 && c >= 0) {
+            return true;
+        }
+        return false;
+    }
+
 public void displayLosingMessage()
 {
     
@@ -163,6 +189,8 @@ public class MSButton
     public void makeClicked() {
         clicked = true;
     }
+    public int getR() {return r;}
+    public int getC() {return c;}
     // called by manager
     
     public void mousePressed () 
@@ -190,26 +218,34 @@ public class MSButton
 
     public void draw () 
     {    
-        if (marked)
+        if (army.get(0) == this) {strokeWeight(2);}
+        if (!(army.get(0) == this)) {strokeWeight(1);}
+
+        if (guns.contains(this))
+            fill(255, 140, 0);
+        else if (marked)
             fill(0, 0, 255);
         else if( clicked && bombs.contains(this) ) 
             fill(255,0,0);
         else if (craters.contains(this))
             fill(0);
-        else if(clicked)
+        else if (army.contains(this))
+            //
+            fill(0, 150, 0);
+        else if (clicked)
             fill( 200 );
         else 
             fill( 100 );
 
         rect(x, y, width, height);
         fill(0);
-        text(label,x+width/2,y+height/2);
+        if (!(army.get(0) == this)) {text(label,x+width/2,y+height/2);}
     }
     public void setLabel(String newLabel)
     {
         label = newLabel;
     }
-    public boolean isValid(int r, int c)
+    /*public boolean isValid(int r, int c)
     {
         //your code here
 
@@ -217,7 +253,7 @@ public class MSButton
             return true;
         }
         return false;
-    }
+    }*/
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
@@ -237,15 +273,57 @@ public class MSButton
 
 public void keyPressed() {
     clickCounter ++;
-    /*if (key == 'w') {
+    artillery();
+    int r = army.get(0).getR();
+    int c = army.get(0).getC();
 
-    }*/
+    if (key == 'w') 
+        if (isValid(r - 1, c)) {
+            if (bombs.contains(buttons[r - 1][c]) || craters.contains(buttons[r - 1][c])) {
+                displayLosingMessage();
+            }
+            if (guns.contains(buttons[r - 1][c])) {
+                guns.remove(buttons[r - 1][c]);
+            }
+            army.add(0, buttons[r - 1][c]);
+        }
+    if (key == 'a') 
+        if (isValid(r, c - 1)) {
+            if (bombs.contains(buttons[r][c - 1]) || craters.contains(buttons[r][c - 1]))
+                displayLosingMessage();
+            if (guns.contains(buttons[r][c - 1])) {
+                guns.remove(buttons[r][c - 1]);
+            }
+            army.add(0, buttons[r][c - 1]);
+        }
+    if (key == 's')
+        if (isValid(r + 1, c)) {
+            if (bombs.contains(buttons[r + 1][c]) || craters.contains(buttons[r + 1][c]))
+                displayLosingMessage();
+            if (guns.contains(buttons[r + 1][c])) {
+                guns.remove(buttons[r + 1][c]);
+            }
+            army.add(0, buttons[r + 1][c]);
+        }
+    if (key == 'd')
+        if (isValid(r, c + 1)) {
+            if (bombs.contains(buttons[r][c + 1]) || craters.contains(buttons[r][c + 1]))
+                displayLosingMessage();
+            if (guns.contains(buttons[r][c + 1])) {
+                guns.remove(buttons[r][c + 1]);
+            }
+            army.add(0, buttons[r][c + 1]);
+        }
 }
 
 public void mouseReleased() {
-    clickCounter ++;
-    artillery();
+    if (mouseButton == LEFT) {
+        clickCounter ++;
+        artillery();
+    }
 }
+
+//TO DO: when mark-unmark, dsplays bombs...
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Minesweeper" };
     if (passedArgs != null) {
