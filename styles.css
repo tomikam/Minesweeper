@@ -6,16 +6,33 @@ body {
 }
 
 #content {
-    display: block;
+    clear: both;
+    display: inline-block;
+    float: right;
+    position: absolute;
     margin-left: auto;
     margin-right: auto
 }
 
 header {
-	
+    
+	display: block;
+    position: fixed;
+    float: left;
 }
 
-footer {
+h1 {
+    font-size: 60px;
+    font-family: Impact;
+}
+
+/*footer {
+    display: inline-block;
+    float: left;
 	font-style: italic;
 	font-size: 90%;
+}*/
+
+* {
+    border: 1px dashed blue;
 }
