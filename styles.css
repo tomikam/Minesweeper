@@ -2,7 +2,8 @@ body {
     background-color: rgb(200,200,200);
     color: rgb(0,0,0);
     font-family: "Open Sans", sans-serif;
-    text-align: center;
+    text-align: left;
+    margin-top: 10%;
 }
 
 #content {
@@ -12,13 +13,18 @@ body {
     position: absolute;
     margin-left: auto;
     margin-right: auto
+
 }
 
 header {
     
 	display: block;
-    position: fixed;
+    clear: left;
+    width: 600px;
+    /*position: fixed;*/
     float: left;
+    margin-left: 6%;
+    margin-right: 6%;
 }
 
 h1 {
@@ -33,6 +39,6 @@ h1 {
 	font-size: 90%;
 }*/
 
-* {
+/** {
     border: 1px dashed blue;
-}
+}*/

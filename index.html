@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<head>
 		<meta charset="utf-8">
-		<title>Title</title>
+		<title>Minesweeper</title>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="styles.css">
 		<script src="processing.js"></script>
@@ -10,14 +10,15 @@
 	<body>
 		<header>
 			<h1>Minesweeper</h1>
-			
+			<p>Instructions:</p>
+			<p>Left click to check a square, right click to mark it, just like in normal Minesweeper.</p>
+			<p>The orange squares are the enemy's artillery. Every three moves that you make, their artillery will take a shot at the map, represented by black squares. Black squares are impassable and cannot reveal label info about nearby mines, so work quickly!</p>
+			<p>The green squares are your army. Move the head of the army with WASD. If the head of your army reaches an artillery position, it is destroyed. Defeat all artillery to win. </p>
 		</header>
 			<section id="content">
 				<canvas id="Minesweeper" data-processing-sources="Minesweeper.pde">
 				</canvas>
 		    </section>
-	    <footer>
-		    Instructions
-	    </footer>
+	    
 	</body>
 </html>
