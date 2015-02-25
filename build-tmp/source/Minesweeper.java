@@ -68,8 +68,8 @@ public void setGuns()
 {
     int i = 0;
     while (i < 3) {
-        int x = ((int)(Math.random()*19));
-        int y = ((int)(Math.random()*19));
+        int x = ((int)(Math.random()*16)); //Could be 19
+        int y = ((int)(Math.random()*16));
         if (!(bombs.contains(buttons[x][y])) && !(army.contains(buttons[x][y]))) {
             guns.add(buttons[x][y]);
             i ++;
@@ -88,7 +88,7 @@ public void artillery() {
     if (clickCounter % 3 == 0) {
         int x = ((int)(Math.random()*20));
         int y = ((int)(Math.random()*20));
-        if (!(craters.contains(buttons[x][y])) && x != 0 && y != 0) {
+        if (!(craters.contains(buttons[x][y])) && !(guns.contains(buttons[x][y])) && !(buttons[x][y] == army.get(0))) {
             craters.add(buttons[x][y]);
         }
     }      
@@ -196,9 +196,9 @@ public class MSButton
     public void mousePressed () 
     {
         if (!gameOver)
-            clicked = true;
+            if (mouseButton == LEFT) {clicked = true;}
             if (mouseButton == RIGHT) {
-                marked = true;
+                marked = !marked;
                 /*if (!(isMarked())) {marked = true;}
                 if (isMarked()) {marked = false; clicked = false;}*/
             } else if (bombs.contains(this)) {
@@ -241,7 +241,7 @@ public class MSButton
 
         rect(x, y, width, height);
         fill(0);
-        if (!(army.get(0) == this)) {text(label,x+width/2,y+height/2);}
+        if (!(army.contains(this)) && !(craters.contains(this))) {text(label,x+width/2,y+height/2);}
     }
     public void setLabel(String newLabel)
     {
