@@ -30,7 +30,7 @@ int clickCounter;
 
 public void setup ()
 {
-    size(400, 400);
+    size(400, 450);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -78,9 +78,31 @@ public void setGuns()
 }
 public void draw ()
 {
-    background( 0 );
+    fill(0);
+    rect(0, 0, 400, 400);
+    //background( 0 );
     if(isWon())
         displayWinningMessage();
+    
+    if (!gameOver) {
+        fill(200);
+        rect(0, 400, 400, 50);
+        if (clickCounter % 3 == 1) {
+            fill(255, 140, 0);
+            rect(10, 410, 120, 30);
+        } else if (clickCounter % 3 == 2) {
+            fill(255, 140, 0);
+            rect(10, 410, 120, 30);
+            rect(140, 410, 120, 30);
+        } else if (clickCounter % 3 == 0) {
+            fill(255, 140, 0);
+            rect(10, 410, 120, 30);
+            rect(140, 410, 120, 30);
+            rect(270, 410, 120, 30);
+        }
+    } else if (gameOver) {
+
+    }
     
  
 }
@@ -126,14 +148,21 @@ public void displayLosingMessage()
 {
     
 
-    buttons[10][6].setLabel("Y");
+    /*buttons[10][6].setLabel("Y");
     buttons[10][7].setLabel("O");
     buttons[10][8].setLabel("U");
     buttons[10][9].setLabel("");
     buttons[10][10].setLabel("L");
     buttons[10][11].setLabel("O");
     buttons[10][12].setLabel("S");
-    buttons[10][13].setLabel("T");
+    buttons[10][13].setLabel("T");*/
+
+    fill(200);
+    rect(0, 400, 400, 50);
+    fill(0);
+    textSize(40);
+    text("YOU LOSE", 200, 420);
+    textSize(11);
 
 
 
