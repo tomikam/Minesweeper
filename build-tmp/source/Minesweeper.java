@@ -84,7 +84,7 @@ public void draw ()
     if(isWon())
         displayWinningMessage();
     
-    if (!gameOver) {
+    if (!gameOver && !isWon()) {
         fill(200);
         rect(0, 400, 400, 50);
         if (clickCounter % 3 == 1) {
@@ -100,9 +100,7 @@ public void draw ()
             rect(140, 410, 120, 30);
             rect(270, 410, 120, 30);
         }
-    } else if (gameOver) {
-
-    }
+    } 
     
  
 }
@@ -174,7 +172,7 @@ public void displayLosingMessage()
 }
 public void displayWinningMessage()
 {
-    fill(0);
+    /*fill(0);
     stroke(0);
     buttons[10][6].setLabel("Y");
     buttons[10][7].setLabel("O");
@@ -183,8 +181,13 @@ public void displayWinningMessage()
     buttons[10][10].setLabel("W");
     buttons[10][11].setLabel("O");
     buttons[10][12].setLabel("N");
-    buttons[10][13].setLabel("!");
-    
+    buttons[10][13].setLabel("!");*/
+    fill(200);
+    rect(0, 400, 400, 50);
+    fill(0);
+    textSize(40);
+    text("YOU WIN!", 200, 420);
+    textSize(11);
 
 }
 
@@ -300,6 +303,11 @@ public class MSButton
 
         return numBombs;
     }
+    public void resetButton() {
+        clicked = false;
+        marked = false;
+        label = "";
+    }
 }
 
 public void keyPressed() {
@@ -352,6 +360,30 @@ public void mouseReleased() {
         clickCounter ++;
         artillery();
     }
+    if ( (gameOver || isWon() ) && mouseY > 400 ) {resetGame();}
+}
+
+public void resetGame() {
+    for (int i = 0; i < bombs.size(); i ++) {
+        bombs.remove(0);
+    }
+    for (int i = 0; i < guns.size(); i ++) {
+        guns.remove(0);
+    }
+    for (int i = 0; i < craters.size(); i ++) {
+        craters.remove(0);
+    }
+    /*for (int i = 0; i < army.size(); i ++) {
+        army.remove(0);
+    }*/
+    setBombs();
+    setGuns();
+    for (int i = 0; i < NUM_ROWS; i ++) {
+        for (int j = 0; j < NUM_COLS; j ++) {
+            buttons[i][j].resetButton();
+        }
+    }
+    gameOver = false;
 }
 
 //TO DO: when mark-unmark, dsplays bombs...
