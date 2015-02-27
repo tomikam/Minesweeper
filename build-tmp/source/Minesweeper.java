@@ -18,7 +18,8 @@ public class Minesweeper extends PApplet {
 
 
 
-public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20; public final static int NUM_BOMBS = 45;
+public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20; 
+public final static int NUM_BOMBS = 45; public final static int NUM_GUNS = 1;
 private MSButton[][] buttons = new MSButton[20][20]; //2d array of minesweeper buttons
 ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 ArrayList <MSButton> craters = new ArrayList <MSButton>();
@@ -67,7 +68,7 @@ public void setBombs()
 public void setGuns()
 {
     int i = 0;
-    while (i < 3) {
+    while (i < NUM_GUNS) {
         int x = ((int)(Math.random()*16)); //Could be 19
         int y = ((int)(Math.random()*16));
         if (!(bombs.contains(buttons[x][y])) && !(army.contains(buttons[x][y]))) {
@@ -86,6 +87,7 @@ public void draw ()
     
     if (!gameOver && !isWon()) {
         fill(200);
+        
         rect(0, 400, 400, 50);
         if (clickCounter % 3 == 1) {
             fill(255, 140, 0);
@@ -146,22 +148,17 @@ public void displayLosingMessage()
 {
     
 
-    /*buttons[10][6].setLabel("Y");
-    buttons[10][7].setLabel("O");
-    buttons[10][8].setLabel("U");
-    buttons[10][9].setLabel("");
-    buttons[10][10].setLabel("L");
-    buttons[10][11].setLabel("O");
-    buttons[10][12].setLabel("S");
-    buttons[10][13].setLabel("T");*/
+    
 
     fill(200);
     rect(0, 400, 400, 50);
     fill(0);
     textSize(40);
-    text("YOU LOSE", 200, 420);
+    text("YOU LOSE", 100, 420);
     textSize(11);
-
+    textAlign(LEFT, TOP);
+    text("Click here to play again!", 225, 420, 480, 450);
+    textAlign(CENTER, CENTER);
 
 
     for (int i = 0; i < bombs.size(); i ++) {
@@ -172,22 +169,17 @@ public void displayLosingMessage()
 }
 public void displayWinningMessage()
 {
-    /*fill(0);
-    stroke(0);
-    buttons[10][6].setLabel("Y");
-    buttons[10][7].setLabel("O");
-    buttons[10][8].setLabel("U");
-    buttons[10][9].setLabel("");
-    buttons[10][10].setLabel("W");
-    buttons[10][11].setLabel("O");
-    buttons[10][12].setLabel("N");
-    buttons[10][13].setLabel("!");*/
+    
     fill(200);
     rect(0, 400, 400, 50);
     fill(0);
     textSize(40);
-    text("YOU WIN!", 200, 420);
+    text("YOU WIN!", 100, 420);
     textSize(11);
+    textAlign(LEFT, TOP);
+    text("Click here to play again!", 225, 420, 480, 450);
+    textAlign(CENTER, CENTER);
+    
 
 }
 
@@ -231,8 +223,6 @@ public class MSButton
             if (mouseButton == LEFT) {clicked = true;}
             if (mouseButton == RIGHT) {
                 marked = !marked;
-                /*if (!(isMarked())) {marked = true;}
-                if (isMarked()) {marked = false; clicked = false;}*/
             } else if (bombs.contains(this)) {
                 displayLosingMessage();
             } else if (countBombs(r, c) > 0) {
@@ -356,7 +346,7 @@ public void keyPressed() {
 }
 
 public void mouseReleased() {
-    if (mouseButton == LEFT) {
+    if (mouseButton == LEFT && !gameOver) {
         clickCounter ++;
         artillery();
     }
@@ -364,7 +354,7 @@ public void mouseReleased() {
 }
 
 public void resetGame() {
-    for (int i = 0; i < bombs.size(); i ++) {
+    /*for (int i = 0; i < bombs.size(); i ++) {
         bombs.remove(0);
     }
     for (int i = 0; i < guns.size(); i ++) {
@@ -373,9 +363,16 @@ public void resetGame() {
     for (int i = 0; i < craters.size(); i ++) {
         craters.remove(0);
     }
-    /*for (int i = 0; i < army.size(); i ++) {
+    for (int i = 0; i < army.size(); i ++) {
         army.remove(0);
     }*/
+    bombs = new ArrayList <MSButton>();
+    guns = new ArrayList <MSButton>();
+    craters = new ArrayList <MSButton>();
+    army = new ArrayList <MSButton>();
+
+    army.add(buttons[19][19]);
+
     setBombs();
     setGuns();
     for (int i = 0; i < NUM_ROWS; i ++) {
@@ -386,7 +383,6 @@ public void resetGame() {
     gameOver = false;
 }
 
-//TO DO: when mark-unmark, dsplays bombs...
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Minesweeper" };
     if (passedArgs != null) {
