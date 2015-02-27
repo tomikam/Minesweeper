@@ -19,7 +19,7 @@ public class Minesweeper extends PApplet {
 
 
 public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20; 
-public final static int NUM_BOMBS = 45; public final static int NUM_GUNS = 1;
+public final static int NUM_BOMBS = 45; public final static int NUM_GUNS = 3;
 private MSButton[][] buttons = new MSButton[20][20]; //2d array of minesweeper buttons
 ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 ArrayList <MSButton> craters = new ArrayList <MSButton>();
@@ -87,7 +87,7 @@ public void draw ()
     
     if (!gameOver && !isWon()) {
         fill(200);
-        
+
         rect(0, 400, 400, 50);
         if (clickCounter % 3 == 1) {
             fill(255, 140, 0);
