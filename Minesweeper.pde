@@ -1,7 +1,7 @@
 
 import de.bezier.guido.*;
 public final static int NUM_ROWS = 20; public final static int NUM_COLS = 20; 
-public final static int NUM_BOMBS = 45; public final static int NUM_GUNS = 5;
+public final static int NUM_BOMBS = 45; public final static int NUM_GUNS = 3;
 private MSButton[][] buttons = new MSButton[20][20]; //2d array of minesweeper buttons
 ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 ArrayList <MSButton> craters = new ArrayList <MSButton>();
@@ -96,28 +96,37 @@ public void artillery() {
         int c = army.get(0).getC();
         int nR = r + xMod;
         int nC = c + yMod;
+
         
-        if (
-                (isValid(nR + 1, nC + 1) && (craters.contains(buttons[nR + 1][nC + 1])) ) &&
-                (isValid(nR + 1, nC) && (craters.contains(buttons[nR + 1][nC])) ) &&
-                (isValid(nR + 1, nC - 1) && (craters.contains(buttons[nR + 1][nC - 1])) ) &&
-                (isValid(nR, nC + 1) && (craters.contains(buttons[nR][nC + 1])) ) &&
-                (isValid(nR, nC - 1) && (craters.contains(buttons[nR][nC - 1])) ) &&
-                (isValid(nR - 1, nC + 1) && (craters.contains(buttons[nR - 1][nC + 1])) ) &&
-                (isValid(nR - 1, nC) && (craters.contains(buttons[nR - 1][nC])) ) &&
-                (isValid(nR - 1, nC - 1) && (craters.contains(buttons[nR - 1][nC - 1])) )
 
-                ) {
-            gameOver = true;
-        }
-
-        else if ( isValid(nR, nC) && !(craters.contains(buttons[nR][nC])) && !(guns.contains(buttons[nR][nC])) && !(buttons[nR][nC] == army.get(0))) {
+        if ( isValid(nR, nC) && !(craters.contains(buttons[nR][nC])) && !(guns.contains(buttons[nR][nC])) && !(buttons[nR][nC] == army.get(0))) {
 
             
             craters.add(buttons[nR][nC]);
         } 
 
         else {artillery();}
+
+        ArrayList <MSButton> tempA = new ArrayList <MSButton>();
+
+        if (isValid(r - 1, c - 1)) {tempA.add(buttons[r - 1][c - 1]);}
+        if (isValid(r - 1, c)) {tempA.add(buttons[r - 1][c]);}
+        if (isValid(r - 1, c + 1)) {tempA.add(buttons[r - 1][c + 1]);}
+        if (isValid(r, c - 1)) {tempA.add(buttons[r][c - 1]);}
+        if (isValid(r, c + 1)) {tempA.add(buttons[r][c + 1]);}
+        if (isValid(r + 1, c - 1)) {tempA.add(buttons[r + 1][c - 1]);}
+        if (isValid(r + 1, c)) {tempA.add(buttons[r + 1][c]);}
+        if (isValid(r + 1, c + 1)) {tempA.add(buttons[r + 1][c + 1]);}
+
+        boolean stuck = true;
+
+        for (MSButton t: tempA) {
+            if (!craters.contains(t)) {stuck = false;}
+        }
+
+        if (stuck) {
+            displayLosingMessage();
+        }
     }   
 }
 public boolean isWon()
@@ -312,7 +321,7 @@ public void keyPressed() {
     int c = army.get(0).getC();
 
     if (key == 'w') 
-        if (isValid(r - 1, c) && !(craters.contains(buttons[r - 1][c])) && !(army.contains(buttons[r - 1][c]))) {
+        if (isValid(r - 1, c) && !(craters.contains(buttons[r - 1][c])) ) {
             if (bombs.contains(buttons[r - 1][c])) {
                 displayLosingMessage();
             }
@@ -322,7 +331,7 @@ public void keyPressed() {
             army.add(0, buttons[r - 1][c]);
         }
     if (key == 'a') 
-        if (isValid(r, c - 1) && !(craters.contains(buttons[r][c - 1])) && !(army.contains(buttons[r][c - 1]))) {
+        if (isValid(r, c - 1) && !(craters.contains(buttons[r][c - 1])) ) {
             if (bombs.contains(buttons[r][c - 1]))
                 displayLosingMessage();
             if (guns.contains(buttons[r][c - 1])) {
@@ -331,7 +340,7 @@ public void keyPressed() {
             army.add(0, buttons[r][c - 1]);
         }
     if (key == 's')
-        if (isValid(r + 1, c) && !(craters.contains(buttons[r + 1][c])) && !(army.contains(buttons[r + 1][c]))) {
+        if (isValid(r + 1, c) && !(craters.contains(buttons[r + 1][c])) ) {
             if (bombs.contains(buttons[r + 1][c]))
                 displayLosingMessage();
             if (guns.contains(buttons[r + 1][c])) {
@@ -340,7 +349,7 @@ public void keyPressed() {
             army.add(0, buttons[r + 1][c]);
         }
     if (key == 'd')
-        if (isValid(r, c + 1) && !(craters.contains(buttons[r][c + 1])) && !(army.contains(buttons[r][c + 1]))) {
+        if (isValid(r, c + 1) && !(craters.contains(buttons[r][c + 1])) ) {
             if (bombs.contains(buttons[r][c + 1]))
                 displayLosingMessage();
             if (guns.contains(buttons[r][c + 1])) {
