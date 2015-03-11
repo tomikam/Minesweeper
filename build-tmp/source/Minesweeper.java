@@ -108,18 +108,25 @@ public void draw ()
 }
 public void artillery() {
     if (clickCounter % 3 == 0) {
-        int xMod = ((int)(Math.random()*4 - 2));
-        int yMod = ((int)(Math.random()*4 - 2));
+        int nR, nC;
         int r = army.get(0).getR();
         int c = army.get(0).getC();
-        int nR = r + xMod;
-        int nC = c + yMod;
+        if (clickCounter % 6 != 0) {
+            int xMod = ((int)(Math.random()*4 - 2));
+            int yMod = ((int)(Math.random()*4 - 2));
+            
+            nR = r + xMod;
+            nC = c + yMod;
+        } else {
+            nR = ((int)(Math.random()*17));
+            nC = ((int)(Math.random()*17));
+        }
+        
 
         
 
         if ( isValid(nR, nC) && !(craters.contains(buttons[nR][nC])) && !(guns.contains(buttons[nR][nC])) && !(buttons[nR][nC] == army.get(0))) {
 
-            
             craters.add(buttons[nR][nC]);
         } 
 
